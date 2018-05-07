@@ -40,3 +40,4 @@ values ("Sweet Roll", "food", 2, 60);
 insert into products (product_name, department_name, price, stock_quantity)
 values ("Asparagus Water", "food", 14, 100);
 
+select stock_quantity from products where item_id = 2;

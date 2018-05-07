@@ -11,16 +11,13 @@ const connection = mySQL.createConnection({
 var inventory = [];
 
 function grabAndPrint(){
-    connection.connect(function(err){
-        if(err)throw err;
-        // console.log("connected")
-    })
+
     connection.query("select * from products",function(err, resp){
         if(err)throw err;
         printOut(resp);
 
     })
-    connection.end();
+    
 }
 
 function printOut(inv){
@@ -57,11 +54,56 @@ function askToBuy(itemsArr){
                 name:"qtyToBuy"
             }
         ]).then(function(response){
-            console.log(responseID)
+            let purchaseNum = response.qtyToBuy;
+            // console.log(responseID)
+            compareQuantities(purchaseNum, responseID);
         })
     })
 }
 
+function compareQuantities(qty, id){
+    // console.log(qty, id)
+    let queryString = "select stock_quantity from products where item_id = "+id
+    // connection.connect(function(err){if (err) throw err})
+    connection.query(queryString , function(err, resp){
+        if (err) throw err;
+        let qtyAvailable = resp[0].stock_quantity;
+        // console.log(qtyAvailable)
+        if (qtyAvailable < qty){
+            console.log("Insufficient Quantity!")
+            console.log("Returning to item selection...")
+            // connection.end();
+            grabAndPrint();
+        } else {
+            let newQty = qtyAvailable-qty
+            updateQuantity(id, newQty)
+            let queryString = "select price from products where item_id = "+id;
+            connection.query(queryString, function(err, resp){
+                if (err) throw err;
+                let itemPrice = resp[0].price;
+                let transactionTotal = qty * itemPrice;
+                console.log("Please pay "+transactionTotal)
+            })
+        }
+    })
+}
+
+function updateQuantity(id, qty){
+    connection.query("update products set ? where ?",[
+        {
+            stock_quantity: qty
+        },
+        {
+            item_id: id
+        }
+    ], function(err, resp){
+        
+    })
+}
+connection.connect(function(err){
+    if(err)throw err;
+    // console.log("connected")
+})
 grabAndPrint();
 
 
