@@ -4,7 +4,7 @@ const connection = mySQL.createConnection({
     host:"localhost",
     port:3306,
     user:"root",
-    password:"23isNum1!",
+    password:"###########",
     database:"bamazon"
 })
 const whatDoChoices = ["View the inventory","View items with low inventory","Add more of a certain item","Add a new item to the inventory"]

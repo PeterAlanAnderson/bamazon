@@ -4,7 +4,7 @@ const connection = mySQL.createConnection({
     host:"localhost",
     port:3306,
     user:"root",
-    password:"23isNum1!",
+    password:"###########",
     database:"bamazon"
 })
 
@@ -97,7 +97,7 @@ function updateQuantity(id, qty){
             item_id: id
         }
     ], function(err, resp){
-        
+
     })
 }
 connection.connect(function(err){
